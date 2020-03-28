@@ -15,6 +15,12 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 100);
+            $table->string('adress',1000);
+            $table->string('phone', 20);
+            $table->string('note', 1000);
+            $table->string('ship_status')->default(\App\Order::NOT_SHIPPED);
+            $table->string('paid_status')->default(\App\Order::UNPAID_INVOICE);
             $table->timestamps();
         });
     }
