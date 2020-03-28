@@ -29,4 +29,9 @@ class Product extends Model
     public function orders() {
         return $this->belongsToMany(Order::class);
     }
+
+    public function getPriceProduct () {
+        if (!$this->discount_price) return $this->discount_price;
+        return $this->price;
+    }
 }

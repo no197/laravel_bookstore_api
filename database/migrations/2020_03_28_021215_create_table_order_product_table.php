@@ -16,13 +16,14 @@ class CreateTableOrderProductTable extends Migration
         Schema::create('order_product', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
-            $table->integer('product_id')->unsinged();
+            $table->integer('product_id')->unsigned();
             $table->integer('quantity')->unsigned();
             $table->float('total')->unsign();
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('product_id')->references('id')->on('products');
+
         });
     }
 
