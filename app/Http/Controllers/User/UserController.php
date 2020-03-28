@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\ApiController;
 use App\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return response()->json(['data' => $users], 200);
+        return $this->showAll($users, 200);
     }
 
     /**
@@ -54,7 +53,7 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        return response()->json(['data' => $user], 201);
+        return $this->showOne($user, 201);
     }
 
     /**
@@ -66,7 +65,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user, 200);
 
     }
 
@@ -116,18 +115,18 @@ class UserController extends Controller
         if ($request->has('admin')) {
 
             if (!$user->isVerified()) {
-                return response()->json('Only verified users can modify the admin field', 409);
+                return $this->errorResponse('Only verified users can modify the admin field', 409);
             }
 
             $user->admin = $request->admin;
         }
 
         if (!$user->isDirty()) {
-            return response()->json('You need to specify a different value to update', 422)->json();
+            return $this->errorResponse('You need to specify a different value to update', 422)->json();
         }
 
         $user->save();
-        return response()->json([data=>$user],200);
+        return $this->showOne($user,200);
 
     }
 
@@ -142,6 +141,6 @@ class UserController extends Controller
         //
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json([],203);
+        return response()->json(null,203);
     }
 }
